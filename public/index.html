@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Meta Webhook Control Center</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="shell">
+    <header>
+      <div class="brand"><div class="mark">M</div><div><h1>Webhook Control Center</h1><p>Meta Platform · Events & callbacks</p></div></div>
+      <span class="live"><i></i> SERVICE CONSOLE</span>
+    </header>
+    <main>
+      <section class="hero">
+        <div><p class="eyebrow">INTEGRATION MONITOR</p><h2>All your events.<br><span>One control center.</span></h2><p class="sub">Inspect incoming Meta webhooks, track callbacks and review raw JSON payloads.</p></div>
+        <div class="endpoint"><small> META WEBHOOK ENDPOINT</small><code id="webhookUrl">/webhook</code><button class="copy" data-copy="webhook">Copy URL</button><small class="muted">Generic callback: <code id="callbackUrl">/callback</code></small>
+        <small class="muted">Facebook Login deauth: <code>/facebook/deauthorize</code></small>
+        <small class="muted">Data deletion: <code>/facebook/data-deletion</code></small></div>
+      </section>
+      <section class="login panel" id="loginPanel">
+        <div><h3>Admin access</h3><p>Enter your dashboard password to view event logs.</p></div>
+        <div class="loginrow"><input id="password" type="password" placeholder="Dashboard password" autocomplete="current-password"><button id="loginBtn">Unlock dashboard</button></div>
+        <p class="error" id="loginError"></p>
+      </section>
+      <section id="dashboard" hidden>
+        <section class="panel token-panel">
+          <div class="token-head"><div><h3>Meta access token</h3><p id="tokenStatus">Connect Facebook to exchange the login token for a long-lived token.</p></div><a class="connect" href="/auth/facebook">Connect Facebook</a></div>
+          <div class="token-actions"><button class="secondary" id="revealTokenBtn">Reveal saved token</button><button class="secondary" id="copyTokenBtn" hidden>Copy token</button></div>
+          <pre id="tokenOutput" hidden></pre>
+          <p class="muted token-note">The App Secret stays on the server. The long-lived token is encrypted in the Railway database.</p>
+        </section>
+        <div class="stats">
+          <article class="stat"><small>TOTAL EVENTS</small><strong id="total">—</strong></article>
+          <article class="stat"><small>RECEIVED TODAY</small><strong id="today">—</strong></article>
+          <article class="stat"><small>REJECTED SIGNATURES</small><strong id="rejected">—</strong></article>
+        </div>
+        <div class="toolbar"><div><h3>Incoming events</h3><p>Newest requests appear first.</p></div><div class="actions"><button class="secondary" id="refreshBtn">Refresh</button><button class="danger" id="clearBtn">Clear logs</button></div></div>
+        <div class="panel tablewrap"><table><thead><tr><th>EVENT</th><th>SOURCE</th><th>RECEIVED</th><th>VERIFY</th><th>STATUS</th><th></th></tr></thead><tbody id="eventRows"><tr><td colspan="6" class="empty">No events yet.</td></tr></tbody></table></div>
+        <div class="panel detail" id="detail"><div class="detailhead"><div><h3>Event payload</h3><p>Select an event to inspect its headers and JSON.</p></div></div><pre id="payload">{ }</pre></div>
+      </section>
+      <section class="info-grid">
+        <article class="panel"><span class="number">01</span><h3>Meta verification</h3><p>Meta's GET challenge handshake is handled at <code>/webhook</code> using <code>META_VERIFY_TOKEN</code>.</p></article>
+        <article class="panel"><span class="number">02</span><h3>Signature validation</h3><p>POST notifications are checked against <code>X-Hub-Signature-256</code> when <code>META_APP_SECRET</code> is configured.</p></article>
+        <article class="panel"><span class="number">03</span><h3>Login callbacks</h3><p>Facebook Login deauthorization and data-deletion request endpoints are available. Connect these to your own user-data deletion workflow.</p></article>
+      </section>
+      <footer>Keep secrets private. Never paste your Meta App Secret into frontend code or public repositories.</footer>
+    </main>
+  </div>
+  <script src="/app.js"></script>
+</body></html>
